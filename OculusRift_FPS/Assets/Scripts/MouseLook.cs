@@ -3,14 +3,20 @@ using System.Collections;
 
 public class MouseLook : MonoBehaviour {
 
-
+    
     public float lookSensitivity = 5.0f;
-    float yRotation;
-    float xRotation;
-    float currentYRotation;
-    float currentXRotation;
-    float yRotationVelocity;
-    float xRotationVelocity;
+    [HideInInspector]
+    public float yRotation;
+    [HideInInspector]
+    public float xRotation;
+    [HideInInspector]
+    public float currentYRotation;
+    [HideInInspector]
+    public float currentXRotation;
+    [HideInInspector]
+    public float yRotationVelocity;
+    [HideInInspector]
+    public float xRotationVelocity;
     public float lookSmoothDamp = 0.1f;
 
 
