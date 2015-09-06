@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
 
     public float walkAcceleration = 5.0f;
+    public float walkAccelerationAirRatio = 0.1f;
     public float walkDecelerationTime = 1.05f;
     [HideInInspector]
     public float walkDecelerationVelocityX;
@@ -19,9 +20,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
 
         //Get rigidbody velocity x and z and stored in horizontalMovement
         horizontalMovement = new Vector2(GetComponent<Rigidbody>().velocity.x, GetComponent<Rigidbody>().velocity.z);
@@ -40,11 +39,20 @@ public class PlayerMovement : MonoBehaviour {
         //Rotate player in y axis w.r.t camera
         transform.rotation = Quaternion.Euler(new Vector3(0, cameraObject.GetComponent<MouseLook>().currentYRotation, 0));
 
-        //Add relative to move the character in local space w.r.t character forward direction
-        GetComponent<Rigidbody>().AddRelativeForce(new Vector3(Input.GetAxis("Horizontal") * walkAcceleration * Time.deltaTime, 0, Input.GetAxis("Vertical") * walkAcceleration * Time.deltaTime));
+        //Add relative to move the character in local space w.r.t character forward direction when it is grounded
+        if (grounded)
+        {
+            GetComponent<Rigidbody>().AddRelativeForce(new Vector3(Input.GetAxis("Horizontal") * walkAcceleration, 0, Input.GetAxis("Vertical") * walkAcceleration));
+        }
+        //Add relative to move the character in local space w.r.t character forward direction when it is in air
+        else
+        {
+            GetComponent<Rigidbody>().AddRelativeForce(new Vector3(Input.GetAxis("Horizontal") * walkAcceleration * walkAccelerationAirRatio, 0, Input.GetAxis("Vertical") * walkAcceleration * walkAccelerationAirRatio));
+        }
+        
 
-        //Set the character to smoothly stop when movement keys are not pressing
-        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0 && grounded)
+        //Set the character to smoothly stop when movement keys are not pressing and when grounded
+        if (grounded)
         {
             float xVelocity = GetComponent<Rigidbody>().velocity.x;
             float zVelocity = GetComponent<Rigidbody>().velocity.z;
@@ -62,7 +70,7 @@ public class PlayerMovement : MonoBehaviour {
         //Press the space button to jump
         if (Input.GetButtonDown("Jump") && grounded)
         {
-            GetComponent<Rigidbody>().AddForce(0, jumpVelocity, 0);
+            GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, jumpVelocity, 0));
         }
 
 	}
