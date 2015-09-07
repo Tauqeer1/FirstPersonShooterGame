@@ -21,11 +21,11 @@ public class Gun : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        transform.position = cameraObject.transform.position + (Quaternion.Euler(0, targetYRotation, 0) * new Vector3(holdSide, holdHeight, 0));
+        //transform.position = cameraObject.transform.position + (Quaternion.Euler(0, targetYRotation, 0) * new Vector3(holdSide, holdHeight, 0));
 
-        targetXRotation = Mathf.SmoothDamp(targetXRotation, cameraObject.GetComponent<MouseLook>().xRotation,ref targetXRotationVelocity, rotateSpeed);
-        targetYRotation = Mathf.SmoothDamp(targetYRotation, cameraObject.GetComponent<MouseLook>().yRotation, ref targetYRotationVelocity, rotateSpeed);
+        //targetXRotation = Mathf.SmoothDamp(targetXRotation, cameraObject.GetComponent<MouseLook>().xRotation,ref targetXRotationVelocity, rotateSpeed);
+        //targetYRotation = Mathf.SmoothDamp(targetYRotation, cameraObject.GetComponent<MouseLook>().yRotation, ref targetYRotationVelocity, rotateSpeed);
 
-        transform.rotation = Quaternion.Euler(new Vector3(targetXRotation, targetYRotation, 0));
+        //transform.rotation = Quaternion.Euler(new Vector3(targetXRotation, targetYRotation, 0));
 	}
 }
