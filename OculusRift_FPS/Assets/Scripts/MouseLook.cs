@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MouseLook : MonoBehaviour {
+public class MouseLookUp : MonoBehaviour {
 
     
     public float lookSensitivity = 5.0f;

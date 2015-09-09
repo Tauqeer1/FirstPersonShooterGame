@@ -12,6 +12,6 @@ public class PlayerMovementMecannim : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.rotation = Quaternion.Euler(new Vector3(0, cameraObject.GetComponent<MouseLook>().currentYRotation, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(0, cameraObject.GetComponent<MouseLookUp>().currentYRotation, 0));
 	}
 }

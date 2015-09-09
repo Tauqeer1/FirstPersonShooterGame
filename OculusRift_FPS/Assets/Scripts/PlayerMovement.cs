@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour {
         GetComponent<Rigidbody>().velocity = new Vector3(horizontalMovement.x, 0, horizontalMovement.y);
 
         //Rotate player in y axis w.r.t camera
-        transform.rotation = Quaternion.Euler(new Vector3(0, cameraObject.GetComponent<MouseLook>().currentYRotation, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(0, cameraObject.GetComponent<MouseLookUp>().currentYRotation, 0));
 
         //Add relative to move the character in local space w.r.t character forward direction when it is grounded
         if (grounded)
