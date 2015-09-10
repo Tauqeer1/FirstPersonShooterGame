@@ -8,6 +8,12 @@ public class PlayerMovementScript : MonoBehaviour {
     Vector3 move = Vector3.zero;
     public float moveSpeed = 3f;
     public float turnSpeed = 3f;
+    float cameraRotationX = 0f;
+    float minAngleRotation = -45f;
+    float maxAngleRotation = 45f;
+    Vector3 gravity = Vector3.zero;
+    bool jump;
+    public float jumpSpeed = 5f;
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -15,7 +21,6 @@ public class PlayerMovementScript : MonoBehaviour {
     }
     void Update()
     {
-
         //Rotation of Character
         CharacterRotation();
 
@@ -27,8 +32,16 @@ public class PlayerMovementScript : MonoBehaviour {
     /// </summary>
     void CharacterRotation()
     {
-        characterCamera.transform.Rotate(new Vector3(Input.GetAxis("Mouse Y") * turnSpeed, 0, 0));
+        //Rotate the camera in y-axis
         transform.Rotate(new Vector3(0f, Input.GetAxis("Mouse X") * turnSpeed * Time.deltaTime, 0f));
+        //Get the camera x rotation in variable cameraRotationX
+        cameraRotationX -= Input.GetAxis("Mouse Y");
+        //Camera always look in positive z-axis with character
+        characterCamera.transform.forward = transform.forward;
+        //Limit the x Rotation to 45 degree up and down
+        cameraRotationX = Mathf.Clamp(cameraRotationX, minAngleRotation, maxAngleRotation);
+        //Camera rotation in x-axis
+        characterCamera.transform.Rotate(new Vector3(cameraRotationX, 0, 0));
     }
     /// <summary>
     /// Character Movement Function
@@ -44,8 +57,30 @@ public class PlayerMovementScript : MonoBehaviour {
         //TransformDirection converts from local space to world space
         move = transform.TransformDirection(move);
 
-        //controller will move the character with the give moveSpeed
-        controller.SimpleMove(move * moveSpeed);
+        //controller will move the character in meter/second and the velocity along y-axis is ignored but gravity is applied by default
+        //controller.SimpleMove(move * moveSpeed);
+        move *= moveSpeed;
+        if (!controller.isGrounded)
+        {
+            gravity += Physics.gravity * Time.deltaTime;
+        }
+        else
+        {
+            gravity = Vector3.zero;
+            if (jump)
+            {
+                gravity.y = jumpSpeed;
+                jump = false;
+            }
+        }
+        move += gravity;
+        //controller will move the character by motion and the gravity is not apply by default
+        controller.Move(move * Time.deltaTime);
+
+        if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
+        {
+            jump = true;
+        }
     }
 
 
