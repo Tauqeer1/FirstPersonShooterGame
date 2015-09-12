@@ -6,14 +6,16 @@ public class PlayerMovementScript : MonoBehaviour {
     CharacterController controller;
     Camera characterCamera;
     Vector3 move = Vector3.zero;
-    public float moveSpeed = 3f;
     public float turnSpeed = 3f;
+    public float walkSpeed = 5f;
+    public float runSpeed = 10f;
     float cameraRotationX = 0f;
     float minAngleRotation = -45f;
     float maxAngleRotation = 45f;
     Vector3 gravity = Vector3.zero;
     bool jump;
     public float jumpSpeed = 5f;
+    bool running;
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -50,16 +52,20 @@ public class PlayerMovementScript : MonoBehaviour {
     {
         //This move the character w.r.t local space
         move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
         //normalize the move vector
         move.Normalize();
-
         //TransformDirection converts from local space to world space
         move = transform.TransformDirection(move);
-
         //controller will move the character in meter/second and the velocity along y-axis is ignored but gravity is applied by default
         //controller.SimpleMove(move * moveSpeed);
-        move *= moveSpeed;
+        if (running)
+        {
+            move *= runSpeed;
+        }
+        else
+        {
+            move *= walkSpeed;
+        }
         if (!controller.isGrounded)
         {
             gravity += Physics.gravity * Time.deltaTime;
@@ -73,14 +79,16 @@ public class PlayerMovementScript : MonoBehaviour {
                 jump = false;
             }
         }
-        move += gravity;
-        //controller will move the character by motion and the gravity is not apply by default
-        controller.Move(move * Time.deltaTime);
-
         if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
         {
             jump = true;
         }
+        running = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        move += gravity;
+        //controller will move the character by motion and the gravity is not apply by default
+        controller.Move(move * Time.deltaTime);
+
+        
     }
 
 
