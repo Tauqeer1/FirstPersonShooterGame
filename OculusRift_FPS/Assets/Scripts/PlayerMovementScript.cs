@@ -21,7 +21,7 @@ public class PlayerMovementScript : MonoBehaviour {
         controller = GetComponent<CharacterController>();
         characterCamera = GetComponentInChildren<Camera>();
     }
-    void FixedUpdate()
+    void Update()
     {
         //Rotation of Character
         CharacterRotation();
